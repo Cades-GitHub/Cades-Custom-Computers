@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cade's Custom Computers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f4f0;
+    --accent: #c8f060;
+    --mid: #1a1a1a;
+    --gray: #888;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .logo span { color: var(--accent); }
+
+  nav ul {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  nav a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--accent) !important;
+    color: var(--black) !important;
+    padding: 10px 22px;
+    border-radius: 2px;
+    font-weight: 600 !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(200,240,96,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    max-width: 900px;
+    margin-bottom: 40px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--gray);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    padding: 16px 36px;
+    border: none;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .btn-secondary {
+    color: var(--white);
+    padding: 16px 36px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+
+  .hero-stats {
+    position: absolute;
+    bottom: 60px; right: 48px;
+    display: flex;
+    gap: 48px;
+  }
+
+  .stat { text-align: right; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.5rem;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* SECTION SHARED */
+  section {
+    padding: 120px 48px;
+  }
+
+  .section-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    margin-bottom: 24px;
+  }
+
+  /* SERVICES */
+  .services { background: var(--mid); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 64px;
+    border: 1px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--mid);
+    padding: 48px 40px;
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .service-card:hover { background: #222; }
+
+  .service-num {
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+
+  .service-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .service-desc {
+    color: var(--gray);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .service-price {
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  /* BUILDS SHOWCASE */
+  .builds-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 64px;
+  }
+
+  .builds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .build-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .build-card:hover { border-color: rgba(200,240,96,0.3); transform: translateY(-4px); }
+
+  .build-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, #1a1a1a, #111);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .build-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.6));
+  }
+
+  .build-info { padding: 24px; }
+
+  .build-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .build-specs {
+    font-size: 0.8rem;
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .build-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  /* CONFIGURE */
+  .configure { background: var(--mid); }
+
+  .config-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 64px;
+    align-items: start;
+  }
+
+  .config-form { display: flex; flex-direction: column; gap: 20px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+  label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray);
+    font-weight: 500;
+  }
+
+  input, select, textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: rgba(200,240,96,0.4);
+  }
+
+  select option { background: #1a1a1a; }
+
+  textarea { resize: vertical; min-height: 120px; }
+
+  .config-summary {
+    background: rgba(200,240,96,0.04);
+    border: 1px solid rgba(200,240,96,0.15);
+    border-radius: 4px;
+    padding: 40px;
+    position: sticky;
+    top: 100px;
+  }
+
+  .summary-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    color: var(--gray);
+  }
+
+  .summary-item span:last-child { color: var(--white); }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+  }
+
+  .summary-total span:last-child { color: var(--accent); }
+
+  .summary-note {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 20px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 64px;
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 40px; }
+
+  .contact-item h4 {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .contact-item p {
+    font-size: 1rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p { font-size: 0.8rem; color: var(--gray); }
+
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+  }
+
+  .footer-logo span { color: var(--accent); }
+
+  /* DIVIDER LINE */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero > * {
+    animation: fadeUp 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .hero-tag { animation-delay: 0.1s; }
+  h1 { animation-delay: 0.2s; }
+  .hero-sub { animation-delay: 0.3s; }
+  .hero-actions { animation-delay: 0.4s; }
+  .hero-stats { animation-delay: 0.5s; }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav ul { display: none; }
+    .hero { padding: 100px 24px 120px; }
+    .hero-stats { position: static; flex-direction: row; margin-top: 48px; gap: 32px; }
+    .stat { text-align: left; }
+    section { padding: 80px 24px; }
+    .services-grid, .builds-grid, .config-wrapper, .contact-grid { grid-template-columns: 1fr; }
+    .builds-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Cade's<span>.</span></div>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#builds">Builds</a></li>
+    <li><a href="#configure">Configure</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#configure" class="nav-cta">Get a Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-tag">Custom PC Builder — Est. 2025</div>
+  <h1>Built for how<br>you <em>actually</em><br>play.</h1>
+  <p class="hero-sub">Every machine hand-built, stress-tested, and tuned to your exact needs. No presets. No compromises. Just your PC, done right.</p>
+  <div class="hero-actions">
+    <a href="#configure" class="btn-primary">Configure Your Build</a>
+    <a href="#builds" class="btn-secondary">View Past Builds</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Stress Tested</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">1yr</div>
+      <div class="stat-label">Labor Warranty</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24hr</div>
+      <div class="stat-label">Response Time</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-tag">What I Offer</div>
+  <h2>Every build,<br>every budget.</h2>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-title">Custom Gaming Builds</div>
+      <p class="service-desc">From budget 1080p rigs to high-end 4K beasts. Every component selected for your specific games, resolution, and refresh rate goals.</p>
+      <div class="service-price">Starting at $75 labor</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-title">Workstation Builds</div>
+      <p class="service-desc">Content creation, streaming, video editing, or 3D rendering. Built with the right CPU, RAM, and storage for professional workloads.</p>
+      <div class="service-price">Starting at $100 labor</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-title">Upgrades & Repairs</div>
+      <p class="service-desc">Already have a PC? Bring it in for a GPU swap, RAM upgrade, new storage, thermal repaste, or troubleshooting. Fast turnaround.</p>
+      <div class="service-price">Starting at $40 labor</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BUILDS SHOWCASE -->
+<section id="builds">
+  <div class="builds-header">
+    <div>
+      <div class="section-tag">Portfolio</div>
+      <h2>Recent builds.</h2>
+    </div>
+    <a href="#configure" class="btn-secondary">Start Your Build →</a>
+  </div>
+
+  <div class="builds-grid">
+    <div class="build-card">
+      <div class="build-img">🖥️</div>
+      <div class="build-info">
+        <div class="build-name">The Midnight Runner</div>
+        <div class="build-specs">
+          RTX 4070 Ti Super · Ryzen 7 7700X<br>
+          32GB DDR5 · 2TB NVMe · White Build
+        </div>
+        <span class="build-tag">1440p Gaming</span>
+      </div>
+    </div>
+    <div class="build-card">
+      <div class="build-img">⚡</div>
+      <div class="build-info">
+        <div class="build-name">The Budget Slayer</div>
+        <div class="build-specs">
+          RX 7600 · Ryzen 5 7600<br>
+          16GB DDR5 · 1TB NVMe · $800 Total
+        </div>
+        <span class="build-tag">1080p Budget</span>
+      </div>
+    </div>
+    <div class="build-card">
+      <div class="build-img">🔥</div>
+      <div class="build-info">
+        <div class="build-name">The Creator Pro</div>
+        <div class="build-specs">
+          RTX 4080 · i9-13900K<br>
+          64GB DDR5 · 4TB NVMe · Full Custom Loop
+        </div>
+        <span class="build-tag">Workstation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONFIGURE / ORDER -->
+<section class="configure" id="configure">
+  <div class="section-tag">Get Started</div>
+  <h2>Configure your build.</h2>
+
+  <div class="config-wrapper">
+    <form class="config-form" id="order-form" action="https://formspree.io/f/maqdvplp" method="POST" onsubmit="handleOrder(event)">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" id="name" name="name" placeholder="John Smith" required>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" name="email" placeholder="john@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Phone (Optional)</label>
+        <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000">
+      </div>
+      <div class="form-group">
+        <label>Build Type</label>
+        <select id="buildType" name="build_type" onchange="updateSummary()">
+          <option value="">Select a build type</option>
+          <option value="budget">Budget Gaming — Under $800</option>
+          <option value="mid">Mid-Range Gaming — $800–$1,400</option>
+          <option value="high">High-End Gaming — $1,400–$2,500</option>
+          <option value="ultra">Ultra / No Limit</option>
+          <option value="workstation">Workstation / Creator</option>
+          <option value="upgrade">Upgrade or Repair</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Primary Use</label>
+        <select id="useCase" name="use_case" onchange="updateSummary()">
+          <option value="">What will you mainly use it for?</option>
+          <option value="gaming">Gaming</option>
+          <option value="streaming">Gaming + Streaming</option>
+          <option value="content">Content Creation / Video Editing</option>
+          <option value="work">Work / Productivity</option>
+          <option value="mixed">Mixed Use</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Total Budget (Including Parts)</label>
+        <input type="text" id="budget" name="budget" placeholder="e.g. $1,200" oninput="updateSummary()">
+      </div>
+      <div class="form-group">
+        <label>Tell me more</label>
+        <textarea id="details" name="details" placeholder="Games you play, monitor resolution/refresh rate, aesthetic preferences (RGB, color scheme, case style), any parts you already own, etc."></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="margin-top:8px;">Submit Build Request</button>
+      <p id="form-msg" style="font-size:0.85rem;color:var(--accent);margin-top:8px;display:none;">✓ Request received! I'll be in touch within 24 hours.</p>
+    </form>
+
+    <div class="config-summary">
+      <div class="summary-title">Build Summary</div>
+      <div class="summary-item"><span>Build Type</span><span id="s-type">—</span></div>
+      <div class="summary-item"><span>Primary Use</span><span id="s-use">—</span></div>
+      <div class="summary-item"><span>Budget</span><span id="s-budget">—</span></div>
+      <div class="summary-item"><span>Est. Labor Fee</span><span id="s-labor">—</span></div>
+      <div class="summary-total">
+        <span>Est. Total</span>
+        <span id="s-total">—</span>
+      </div>
+      <p class="summary-note">Labor fee is separate from parts cost. Final quote provided after consultation. Parts are paid upfront before ordering.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">Get In Touch</div>
+  <h2>Let's talk.</h2>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <h4>Email</h4>
+        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a6a4a1a085a6a4a1a0b6a6b0b6b1aaa8a6aaa8b5b0b1a0b7b6eba6aaa8">[email&#160;protected]</a></p>
+      </div>
+      <div class="contact-item">
+        <h4>Response Time</h4>
+        <p>Within 24 hours, usually much faster.</p>
+      </div>
+      <div class="contact-item">
+        <h4>Location</h4>
+        <p>Local pickups and drop-offs available.<br>Reach out to arrange.</p>
+      </div>
+      <div class="contact-item">
+        <h4>Warranty</h4>
+        <p>1 year labor warranty on all builds.<br>Manufacturer warranty on all parts.</p>
+      </div>
+    </div>
+
+    <form class="contact-form" id="contact-form" action="https://formspree.io/f/maqdvplp" method="POST" onsubmit="handleContact(event)">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" placeholder="Ask anything — pricing, availability, whether a part is worth it..." style="min-height:160px;" required></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Send Message</button>
+      <p id="contact-msg" style="font-size:0.85rem;color:var(--accent);margin-top:8px;display:none;">✓ Message sent! Talk soon.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Cade's<span>.</span> Custom Computers</div>
+  <p>© 2025 Cade's Custom Computers. All rights reserved.</p>
+  <p>Built with care, tested with precision.</p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  const laborMap = {
+    budget: 75, mid: 90, high: 100, ultra: 150, workstation: 120, upgrade: 40
+  };
+
+  const typeLabels = {
+    budget: 'Budget Gaming', mid: 'Mid-Range Gaming', high: 'High-End Gaming',
+    ultra: 'Ultra / No Limit', workstation: 'Workstation', upgrade: 'Upgrade / Repair'
+  };
+
+  const useLabels = {
+    gaming: 'Gaming', streaming: 'Gaming + Streaming',
+    content: 'Content Creation', work: 'Work / Productivity', mixed: 'Mixed Use'
+  };
+
+  function updateSummary() {
+    const type = document.getElementById('buildType').value;
+    const use = document.getElementById('useCase').value;
+    const budget = document.getElementById('budget').value;
+
+    document.getElementById('s-type').textContent = typeLabels[type] || '—';
+    document.getElementById('s-use').textContent = useLabels[use] || '—';
+    document.getElementById('s-budget').textContent = budget || '—';
+
+    if (type && laborMap[type]) {
+      const labor = laborMap[type];
+      document.getElementById('s-labor').textContent = `~$${labor}`;
+      if (budget) {
+        const budgetNum = parseFloat(budget.replace(/[^0-9.]/g, ''));
+        if (!isNaN(budgetNum)) {
+          document.getElementById('s-total').textContent = `~$${(budgetNum + labor).toLocaleString()}`;
+        } else {
+          document.getElementById('s-total').textContent = '—';
+        }
+      } else {
+        document.getElementById('s-total').textContent = '—';
+      }
+    } else {
+      document.getElementById('s-labor').textContent = '—';
+      document.getElementById('s-total').textContent = '—';
+    }
+  }
+
+
+  async function handleOrder(e) {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      build_type: document.getElementById('buildType').value,
+      use_case: document.getElementById('useCase').value,
+      budget: document.getElementById('budget').value,
+      details: document.getElementById('details').value,
+      _subject: 'New Build Request — Cade\'s Custom Computers'
+    };
+    try {
+      const res = await fetch('https://formspree.io/f/maqdvplp', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      const json = await res.json();
+      if (res.ok) {
+        document.getElementById('form-msg').style.display = 'block';
+        form.reset();
+        document.getElementById('s-type').textContent = '—';
+        document.getElementById('s-use').textContent = '—';
+        document.getElementById('s-budget').textContent = '—';
+        document.getElementById('s-labor').textContent = '—';
+        document.getElementById('s-total').textContent = '—';
+      } else {
+        console.error('Formspree error:', json);
+        alert('Error: ' + (json.error || 'Something went wrong. Please try again.'));
+      }
+    } catch(err) {
+      console.error(err);
+      alert('Connection error. Please check your internet and try again.');
+    }
+  }
+
+  async function handleContact(e) {
+    e.preventDefault();
+    const form = e.target;
+    const fields = form.querySelectorAll('input, textarea');
+    const payload = { _subject: 'New Message — Cade\'s Custom Computers' };
+    fields.forEach(f => { if (f.name) payload[f.name] = f.value; });
+    try {
+      const res = await fetch('https://formspree.io/f/maqdvplp', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+      const json = await res.json();
+      if (res.ok) {
+        document.getElementById('contact-msg').style.display = 'block';
+        form.reset();
+      } else {
+        console.error('Formspree error:', json);
+        alert('Error: ' + (json.error || 'Something went wrong. Please try again.'));
+      }
+    } catch(err) {
+      console.error(err);
+      alert('Connection error. Please check your internet and try again.');
+    }
+  }
+</script>
+</body>
+</html>
