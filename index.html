@@ -638,7 +638,7 @@
   <h2>Configure your build.</h2>
 
   <div class="config-wrapper">
-    <form class="config-form" onsubmit="handleOrder(event)">
+    <form class="config-form" id="order-form" action="https://formspree.io/f/maqdvplp" method="POST" onsubmit="handleOrder(event)">
       <div class="form-group">
         <label>Your Name</label>
         <input type="text" id="name" placeholder="John Smith" required>
@@ -712,7 +712,7 @@
     <div class="contact-info">
       <div class="contact-item">
         <h4>Email</h4>
-        <p>cade@cadescustomcomputers.com</p>
+        <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a6a4a1a085a6a4a1a0b6a6b0b6b1aaa8a6aaa8b5b0b1a0b7b6eba6aaa8">[email&#160;protected]</a></p>
       </div>
       <div class="contact-item">
         <h4>Response Time</h4>
@@ -728,7 +728,7 @@
       </div>
     </div>
 
-    <form class="contact-form" onsubmit="handleContact(event)">
+    <form class="contact-form" id="contact-form" action="https://formspree.io/f/maqdvplp" method="POST" onsubmit="handleContact(event)">
       <div class="form-group">
         <label>Name</label>
         <input type="text" placeholder="Your name" required>
@@ -754,7 +754,7 @@
   <p>Built with care, tested with precision.</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const laborMap = {
     budget: 75, mid: 90, high: 100, ultra: 150, workstation: 120, upgrade: 40
   };
@@ -797,21 +797,52 @@
     }
   }
 
-  function handleOrder(e) {
+
+  async function handleOrder(e) {
     e.preventDefault();
-    document.getElementById('form-msg').style.display = 'block';
-    e.target.reset();
-    document.getElementById('s-type').textContent = '—';
-    document.getElementById('s-use').textContent = '—';
-    document.getElementById('s-budget').textContent = '—';
-    document.getElementById('s-labor').textContent = '—';
-    document.getElementById('s-total').textContent = '—';
+    const form = e.target;
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formspree.io/f/maqdvplp', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('form-msg').style.display = 'block';
+        form.reset();
+        document.getElementById('s-type').textContent = '—';
+        document.getElementById('s-use').textContent = '—';
+        document.getElementById('s-budget').textContent = '—';
+        document.getElementById('s-labor').textContent = '—';
+        document.getElementById('s-total').textContent = '—';
+      } else {
+        alert('Something went wrong. Please try again or email directly.');
+      }
+    } catch {
+      alert('Connection error. Please check your internet and try again.');
+    }
   }
 
-  function handleContact(e) {
+  async function handleContact(e) {
     e.preventDefault();
-    document.getElementById('contact-msg').style.display = 'block';
-    e.target.reset();
+    const form = e.target;
+    const data = new FormData(form);
+    try {
+      const res = await fetch('https://formspree.io/f/maqdvplp', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        document.getElementById('contact-msg').style.display = 'block';
+        form.reset();
+      } else {
+        alert('Something went wrong. Please try again or email directly.');
+      }
+    } catch {
+      alert('Connection error. Please check your internet and try again.');
+    }
   }
 </script>
 </body>
